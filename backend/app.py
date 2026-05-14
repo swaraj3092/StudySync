@@ -13,6 +13,18 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from flask import Flask
 from flask_cors import CORS
+import phoenix as px
+from openinference.instrumentation.google_generativeai import GoogleGenerativeAiInstrumentor
+
+# Initialize Arize Phoenix for AI Observability
+# This launches a local dashboard and instruments all Gemini calls
+try:
+    px.launch_app()
+    GoogleGenerativeAiInstrumentor().instrument()
+    print("✦ Arize Phoenix Observability: ACTIVE")
+except Exception as e:
+    print(f"✦ Arize Phoenix failed to start: {e}")
+
 from routes.sessions import sessions_bp
 from routes.notes import notes_bp
 from routes.tasks import tasks_bp

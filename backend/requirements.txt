@@ -4,3 +4,5 @@ pymongo
 pymongo[srv]
 python-dotenv
 google-generativeai
+arize-phoenix
+openinference-instrumentation-google-generativeai
