@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 import os
 import google.generativeai as genai
-from google.cloud import discoveryengine_v1 as discoveryengine
 from google.api_core.client_options import ClientOptions
 from dotenv import load_dotenv
 from config import db
