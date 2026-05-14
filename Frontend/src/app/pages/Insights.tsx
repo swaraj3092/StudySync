@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { api } from '../../lib/api';
-import { Skeleton, PageSkeleton } from '../components/ui/Skeleton';
+import { Skeleton, PageSkeleton } from '../components/ui/skeleton';
 
 interface Session {
   _id: string;

@@ -33,7 +33,7 @@ interface Task {
   completed: boolean;
 }
 
-import { Skeleton, PageSkeleton, CardSkeleton } from '../components/ui/Skeleton';
+import { Skeleton, PageSkeleton, CardSkeleton } from '../components/ui/skeleton';
 
 export function Home() {
   const navigate = useNavigate();
