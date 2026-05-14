@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from flask import Flask
 from flask_cors import CORS
 import phoenix as px
-from openinference.instrumentation.google_generativeai import GoogleGenerativeAiInstrumentor
+from openinference.instrumentation.google_genai import GoogleGenAIInstrumentor
 
 # Initialize Arize Phoenix for AI Observability
 # Switches to Cloud mode if PHOENIX_API_KEY is found, otherwise uses Local mode
@@ -31,12 +31,12 @@ try:
         tracer_provider = TracerProvider()
         tracer_provider.add_span_processor(BatchSpanProcessor(exporter))
         
-        GoogleGenerativeAiInstrumentor().instrument(tracer_provider=tracer_provider)
+        GoogleGenAIInstrumentor().instrument(tracer_provider=tracer_provider)
         print("✦ Arize Phoenix Cloud: CONNECTED")
     else:
         # Local Mode
         px.launch_app()
-        GoogleGenerativeAiInstrumentor().instrument()
+        GoogleGenAIInstrumentor().instrument()
         print("✦ Arize Phoenix Local: ACTIVE (No API Key found)")
 except Exception as e:
     print(f"✦ Arize Phoenix failed to start: {e}")
