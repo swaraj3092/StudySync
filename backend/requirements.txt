@@ -7,3 +7,4 @@ google-generativeai
 arize-phoenix
 openinference-instrumentation-google-generativeai
 opentelemetry-exporter-otlp
+gunicorn
