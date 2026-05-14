@@ -1,0 +1,305 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+
+  /* StudySync Brand Colors */
+  --indigo-600: #3D2FC4;
+  --indigo-500: #5046E5;
+  --indigo-50: #EEEDFE;
+  --teal-500: #00C4A1;
+  --teal-50: #E1FAF5;
+
+  /* Enhanced Light Mode Neutrals */
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+
+  --primary: #3D2FC4;
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #5046E5;
+
+  --secondary: #F8FAFC;
+  --secondary-foreground: #3D2FC4;
+
+  --accent: #10B981;
+  --accent-foreground: #FFFFFF;
+
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+
+  --border: #E2E8F0;
+  --input: #FFFFFF;
+  --input-background: #FFFFFF;
+
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+
+  --success: #10B981;
+  --success-bg: #F0FDF4;
+  --warning: #F59E0B;
+  --warning-bg: #FFFBEB;
+  --danger: #EF4444;
+  --danger-bg: #FEF2F2;
+  --info: #3B82F6;
+  --info-bg: #EFF6FF;
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-hint: #94A3B8;
+
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --ring: #3D2FC4;
+
+  /* Chart colors */
+  --chart-1: #3D2FC4;
+  --chart-2: #10B981;
+  --chart-3: #F59E0B;
+  --chart-4: #EF4444;
+  --chart-5: #64748B;
+
+  /* Border radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius: 8px;
+
+  /* Glassmorphism Tokens - Light */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-blur: 12px;
+  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.04);
+
+  --sidebar: #F8FAFC;
+  --sidebar-foreground: #0F172A;
+  --sidebar-primary: #3D2FC4;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EEEDFE;
+  --sidebar-accent-foreground: #3D2FC4;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #3D2FC4;
+}
+
+.dark {
+  /* Premium Dark Glass Theme */
+  --background: #05060A;
+  --foreground: #F8FAFC;
+  --card: rgba(10, 12, 20, 0.8);
+  --card-foreground: #F8FAFC;
+  --popover: rgba(10, 12, 20, 0.9);
+  --popover-foreground: #F8FAFC;
+
+  --primary: #5046E5;
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #6366F1;
+
+  --secondary: #0F172A;
+  --secondary-foreground: #EEEDFE;
+
+  --accent: #10B981;
+  --accent-foreground: #020617;
+
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: #94A3B8;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.03);
+  --input-background: #1E293B;
+
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-hint: #64748B;
+
+  --ring: #6366F1;
+
+  /* Glassmorphism Tokens - Dark */
+  --glass-bg: rgba(5, 6, 10, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 12px;
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+  /* Sidebar dark mode glass */
+  --sidebar: #05060A;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #6366F1;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(255, 255, 255, 0.05);
+  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #6366F1;
+}
+
+@theme inline {
+  --color-glass-bg: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+  /* ... rest ... */
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-indigo-600: var(--indigo-600);
+  --color-indigo-500: var(--indigo-500);
+  --color-indigo-50: var(--indigo-50);
+  --color-teal-500: var(--teal-500);
+  --color-teal-50: var(--teal-50);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-hint: var(--text-hint);
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code,
+  .font-mono,
+  [class*="mono"] {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /**
+  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
+  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
+  */
+
+  html {
+    font-size: var(--font-size);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  @keyframes progress {
+    0% {
+      transform: translateX(-100%);
+    }
+    50% {
+      transform: translateX(300%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+}

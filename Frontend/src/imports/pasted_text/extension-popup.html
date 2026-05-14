@@ -1,0 +1,461 @@
+You are a world-class UI/UX designer. Create a complete, production-ready design system and all screens for "StudySync" — an AI-powered personal study agent platform. Below is everything you need to design. Follow every detail precisely.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BRAND IDENTITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Product Name: StudySync
+Tagline: "Your AI study co-pilot, active on every tab"
+Personality: Smart, calm, encouraging, minimal. Feels like a premium productivity tool — not a toy.
+Target Users: University students, self-learners, competitive exam aspirants
+
+Logo Concept:
+- A circular icon combining a bookmark and a brain/circuit spark
+- Text: "Study" in regular weight + "Sync" in medium weight
+- Colors: Deep indigo (#3D2FC4) primary, electric teal (#00C4A1) accent
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DESIGN SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COLOR PALETTE (provide both Light and Dark mode for every screen):
+
+Primary:
+  - Indigo 600: #3D2FC4 (buttons, active states, links)
+  - Indigo 500: #5046E5 (hover states)
+  - Indigo 50:  #EEEDFE (subtle tinted backgrounds)
+
+Accent:
+  - Teal 500: #00C4A1 (success, streaks, AI responses)
+  - Teal 50:  #E1FAF5 (teal tinted backgrounds)
+
+Neutral (Light Mode):
+  - Background: #FAFAFA
+  - Surface:    #FFFFFF
+  - Border:     #E5E4E0
+  - Text Primary:   #1A1A1A
+  - Text Secondary: #6B6B6B
+  - Text Hint:      #A0A0A0
+
+Neutral (Dark Mode):
+  - Background: #0E0E10
+  - Surface:    #1A1A1E
+  - Border:     #2A2A30
+  - Text Primary:   #F2F2F2
+  - Text Secondary: #9A9A9A
+  - Text Hint:      #5A5A5A
+
+Semantic:
+  - Success: #00B87A / bg #E6FAF4
+  - Warning: #F5A623 / bg #FEF6E4
+  - Danger:  #E24B4A / bg #FCEBEB
+  - Info:    #3B82F6 / bg #EFF6FF
+
+TYPOGRAPHY:
+  Font Family: Inter (primary), JetBrains Mono (code/timestamps)
+
+  Scale:
+  - Display:    32px / 700 / -0.5px letter-spacing
+  - H1:         24px / 600 / -0.3px
+  - H2:         20px / 600 / -0.2px
+  - H3:         16px / 600
+  - Body Large: 15px / 400 / line-height 1.6
+  - Body:       14px / 400 / line-height 1.6
+  - Small:      12px / 400
+  - Mono:       13px JetBrains Mono
+
+SPACING SYSTEM (8px base):
+  4, 8, 12, 16, 20, 24, 32, 40, 48, 64
+
+BORDER RADIUS:
+  - xs: 4px  (badges, tags)
+  - sm: 8px  (inputs, buttons)
+  - md: 12px (cards, modals)
+  - lg: 16px (sidebar panels, large cards)
+  - xl: 24px (extension popup)
+  - full: 9999px (pills, avatars)
+
+ELEVATION (shadows, light mode only — dark mode uses border only):
+  - Level 1: 0 1px 3px rgba(0,0,0,0.06)
+  - Level 2: 0 4px 12px rgba(0,0,0,0.08)
+  - Level 3: 0 8px 24px rgba(0,0,0,0.10)
+
+ICONOGRAPHY:
+  Use Lucide Icons throughout. Stroke width: 1.5px. Size: 16px inline, 20px navigation, 24px feature icons.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPONENT LIBRARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Design all of these as reusable components:
+
+1. BUTTONS
+   - Primary: Indigo fill, white text, 8px radius, 14px/500, 36px height
+   - Secondary: White fill, indigo text, indigo border
+   - Ghost: No border, indigo text, hover shows light indigo bg
+   - Danger: Red fill version
+   - Icon Button: 36x36 square, centered icon
+   - All states: default, hover, active, disabled, loading (spinner)
+
+2. INPUT FIELDS
+   - Text Input: 40px height, 8px radius, grey border, indigo focus ring 2px
+   - Textarea: min 80px, resize vertical only
+   - Search Input: with search icon left, clear button right
+   - Tag Input: chips inside input field
+   - All states: default, focus, filled, error, disabled
+
+3. CARDS
+   - Session Card: title, source favicon, source type badge, duration, notes count, chevron
+   - Task Card: checkbox, title, due date badge, priority dot (red/amber/green), session link
+   - Note Card: excerpt, session name, timestamp, tag chips
+   - Insight Card: metric number large, label small, trend arrow with % change
+   - Agent Message Card: teal left border, AI avatar, message text, timestamp
+   - User Message Card: right-aligned, indigo bubble
+
+4. NAVIGATION
+   - Left Sidebar (dashboard): 240px wide, logo top, nav links with icons, user profile bottom
+   - Nav Item: icon + label, active = indigo bg pill, hover = grey bg
+   - Top Bar: page title left, search + notification bell + avatar right
+   - Mobile Bottom Nav: 5 icons centered
+
+5. BADGES & TAGS
+   - Subject Tags: rounded pill, colored (ML=purple, AI=blue, Math=amber, etc.)
+   - Status Badge: success/warning/danger variants
+   - Source Type Badge: YouTube=red, Article=blue, PDF=orange, Other=grey
+   - Priority Dot: 8px circle, red/amber/green
+
+6. STREAK COUNTER
+   - Fire emoji icon + number + "day streak" text
+   - Teal color when active, grey when broken
+
+7. AGENT AVATAR
+   - 32x32 circle, indigo-to-teal gradient ring, white inner, "S" monogram or sparkle icon
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN 1 — CHROME EXTENSION POPUP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Size: 360x560px (standard extension popup)
+Border radius: 16px on outer container
+
+HEADER (56px):
+  - Left: StudySync logo (20px) + "StudySync" wordmark
+  - Right: Settings gear icon + Close X icon
+  - Bottom: 1px border separator
+
+STATE A — NOT LOGGED IN:
+  - Centered illustration of a student + laptop (minimal line art, indigo)
+  - Heading: "Start your study session"
+  - Subtext: "Sign in with Google to sync your notes and tasks"
+  - Large "Sign in with Google" button (full width, Google branding)
+
+STATE B — ACTIVE SESSION (main state to design):
+
+  SESSION BANNER (auto-detected, teal background tint):
+  - Auto-detected source icon (YouTube play icon or article icon)
+  - Title truncated: "Machine Learning - Andrew Ng (Week 5)"
+  - Source type badge: "YouTube"
+  - Duration timer: live, format "0:23:14"
+  - End Session button (small, ghost, danger color)
+
+  QUICK NOTES PANEL:
+  - Label: "Notes" with count badge
+  - Textarea: placeholder "Capture what you're learning..."
+  - Below textarea: character count (right-aligned, hint color)
+  - "Save Note" button (primary, small, full width)
+  - Last 2 saved notes shown as compact rows (truncated, timestamp)
+
+  TASKS PANEL:
+  - Label: "Tasks" with count badge
+  - Single-line input: placeholder "Add a task..."
+  - Priority selector: 3 colored dots (tap to select)
+  - Due date: small calendar icon + date picker
+  - "Add" button (icon button)
+  - Last 3 tasks shown as compact checkbox rows
+
+  FOOTER (40px):
+  - Left: "Open Dashboard" text link with arrow icon (indigo)
+  - Right: "📊 12 sessions this week" micro stat
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN 2 — DASHBOARD / HOME PAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Layout: Left sidebar (240px) + main content area
+Design for 1280px wide desktop. Also show a 375px mobile version.
+
+LEFT SIDEBAR:
+  Logo + wordmark at top (24px padding)
+  Navigation items (20px icon, 14px label):
+  - Home (active state shown)
+  - History
+  - Planner
+  - Insights
+  - Agent Chat
+  Divider line
+  - Settings
+  - Help
+  Bottom: User avatar (32px) + name + email + logout icon
+
+TOP BAR (main area):
+  - Left: "Good evening, Swaraj 👋" greeting (H2)
+  - Right: Search bar + notification bell (0 badge) + user avatar
+
+CONTENT GRID:
+
+  ROW 1 — 4 METRIC CARDS (equal width):
+  1. "Today's Sessions" — "3" large, "+1 from yesterday" subtext, green trend arrow
+  2. "Study Time Today" — "2h 14m" large, teal color
+  3. "Pending Tasks" — "7" large, amber color
+  4. "Current Streak" — "🔥 12 days" large, indigo color
+
+  ROW 2 — 2 COLUMN LAYOUT (60/40 split):
+
+  Left column: "Today's Sessions" card
+  - List of 3 session cards (see component definition)
+  - Each session: favicon, title, subject tag, duration, notes count
+  - "View all sessions →" link at bottom
+
+  Right column: "Pending Tasks" card
+  - List of 5 task items with checkbox, title, due date
+  - Priority colored dots
+  - "View all tasks →" link
+
+  ROW 3 — AGENT SUGGESTION BANNER:
+  - Full width, indigo-50 background, teal left border (4px)
+  - Agent avatar (left)
+  - Text: "You studied Backpropagation 8 days ago — time to revise! I've added it to your planner."
+  - Right side: "View Plan" button (indigo, small) + dismiss X
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN 3 — HISTORY PAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Same sidebar layout as Home.
+
+TOP SECTION — FILTERS BAR:
+  - Search input (full text search across sessions)
+  - Filter chips: All / YouTube / Articles / PDFs
+  - Subject dropdown filter
+  - Date range picker (From → To)
+  - Sort: Most Recent / Longest / Most Notes
+
+MAIN CONTENT — GROUPED BY DATE:
+  Date group headers: "Today", "Yesterday", "May 8, 2026"
+  Each group shows session cards in a vertical list.
+
+  SESSION CARD (expanded, horizontal):
+  - Left: source type icon (colored circle, 40px)
+  - Center: title (bold), subject tag, source URL (truncated link)
+  - Right: duration badge, notes count icon, task count icon
+  - Bottom row: timestamp + "View notes" + "Summarize with AI" button
+  
+  EXPANDED STATE (when session is clicked):
+  - Accordion opens below the session card
+  - Shows all notes as compact note blocks (grey bg, mono font hint)
+  - Shows all tasks as checkbox list
+  - "Ask Agent about this session" button (indigo, with sparkle icon)
+
+EMPTY STATE:
+  - Minimal illustration (open book, no pages)
+  - "No sessions yet"
+  - "Open the extension on any tab to start studying"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN 4 — PLANNER PAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP SECTION:
+  - "Your Study Plan" heading
+  - Right: "Generate New Plan" button (primary, with sparkle icon)
+  - Subtext: "Last generated by AI on May 11, 2026"
+
+WEEK SELECTOR:
+  - Horizontal week strip: Mon–Sun
+  - Each day: abbreviated name + date number
+  - Active day: indigo background pill
+  - Days with sessions: teal dot indicator below date
+
+PLAN CARDS (vertical list for selected day):
+  Each plan card:
+  - Left colored bar (subject color)
+  - Time slot: "10:00 AM – 11:30 AM"
+  - Subject tag + topic title
+  - AI reason: small italic text "You haven't revised this in 6 days"
+  - Right: checkbox to mark done + drag handle icon
+
+AI PLAN GENERATION STATE (loading):
+  - Full content area replaced by animated state
+  - Agent avatar with pulsing ring
+  - Step-by-step text animating:
+    "Analyzing your past sessions..."
+    "Identifying weak areas..."
+    "Building your 7-day plan..."
+  - Progress bar (indigo, animated)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN 5 — INSIGHTS PAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP: Page heading + "Week of May 5 – 11" date range selector (arrows to navigate weeks)
+
+SECTION 1 — STUDY HEATMAP:
+  - GitHub contribution graph style
+  - 52 weeks × 7 days grid of small squares
+  - Color: white → indigo-100 → indigo-300 → indigo-600 (intensity by hours studied)
+  - Hover tooltip: "May 8 — 3h 42m across 4 sessions"
+  - Month labels above, day labels left
+
+SECTION 2 — 3 COLUMN STATS GRID:
+  Left: "Time by Subject" — Donut chart (Recharts)
+    - ML: indigo 35%, AI: teal 25%, DBMS: amber 20%, OS: coral 15%, Other: grey 5%
+    - Legend below with colored dots
+
+  Center: "Best Study Times" — Bar chart
+    - X axis: Morning / Afternoon / Evening / Night
+    - Y axis: hours
+    - Bars filled with indigo gradient top to bottom
+
+  Right: "Weekly Progress" — Line chart
+    - Last 4 weeks
+    - This week highlighted in indigo, previous in grey
+
+SECTION 3 — WEAK TOPICS PANEL:
+  - Header: "Topics that need attention" + brain icon
+  - List of topic chips in a wrap layout
+  - Each chip: topic name + "X days since last revision" + revision button
+  - Color gradient: red (most overdue) → amber → green (recently studied)
+
+SECTION 4 — WEEKLY REPORT CARD:
+  - Card with light grey bg
+  - AI avatar left
+  - Heading: "Your week in review"
+  - 3-4 bullet points generated by Gemini:
+    "Studied 14.5 hours — 22% more than last week"
+    "Strongest topic: Support Vector Machines"
+    "Weakest area: PDDL Planning — only 20 min this week"
+    "Suggested focus: Complete OS memory management module"
+  - Rating: 4.2/5 stars with "Great week!" label
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN 6 — AGENT CHAT PAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Layout: Full height, same sidebar. Chat takes full remaining area.
+
+CHAT HEADER (56px):
+  - Agent avatar (36px) + "StudySync Agent" + "Powered by Gemini 3" badge (teal)
+  - Right: Clear chat icon + info icon
+
+CHAT MESSAGES AREA (scrollable, flex-grow):
+  
+  AGENT MESSAGE:
+  - Left-aligned
+  - Agent avatar (28px) + teal dot (online)
+  - Message bubble: white bg, border, 12px radius (no radius bottom-left)
+  - Timestamp below (hint color, 11px)
+  - Action buttons below long messages: "Save to notes" / "Create task from this"
+
+  USER MESSAGE:
+  - Right-aligned
+  - Indigo bubble, white text
+  - 12px radius (no radius bottom-right)
+
+  SUGGESTED PROMPTS (shown when chat is empty):
+  - 4 suggestion chips in a 2x2 grid:
+    "📅 Make me a study plan for this week"
+    "🧠 Quiz me on my latest notes"
+    "📊 What did I study last week?"
+    "⚠️ What topics should I revise urgently?"
+
+  AGENT THINKING STATE:
+  - 3 animated dots in agent bubble (typing indicator)
+  - Below: "Checking your MongoDB sessions..." italic micro-text (teal)
+
+CHAT INPUT BAR (fixed bottom, 64px):
+  - Textarea (grows up to 3 lines)
+  - Placeholder: "Ask your agent anything about your studies..."
+  - Left: Attachment icon (disabled, grey)
+  - Right: Send button (indigo circle, arrow icon, disabled when empty)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN 7 — ONBOARDING FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3-step centered modal flow (560px wide card):
+
+STEP 1 — SIGN IN:
+  - StudySync logo (large, centered)
+  - "Your AI study co-pilot" heading
+  - "Sign in with Google" button (full width, Google branding)
+  - Small text: "Your data is stored securely in MongoDB"
+
+STEP 2 — SETUP:
+  - "What are you studying?" heading
+  - Subject tag selector (multi-select chips): ML, AI, DBMS, OS, Maths, Physics, etc.
+  - "Add custom subject" text input
+  - "Continue" button
+
+STEP 3 — INSTALL EXTENSION:
+  - Browser mockup illustration showing the extension active on YouTube
+  - "Install the Chrome Extension" heading
+  - "Add to Chrome" button (with Chrome logo)
+  - Below: "Already installed? Skip →"
+
+Progress dots (3 steps) at bottom of each step card.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ADDITIONAL DESIGN NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MICRO-INTERACTIONS TO DEFINE:
+  - Session card hover: slight elevation + border color change
+  - Task checkbox: satisfying teal checkmark animation
+  - Streak counter: flame pulse animation on new streak day
+  - Agent thinking: smooth dot bounce animation
+  - Note save: brief green flash confirmation on extension
+  - Plan generation: step-by-step reveal animation
+
+EMPTY STATES:
+  Design empty states for each page with:
+  - Minimal flat illustration (indigo/teal palette, no detail)
+  - Short heading
+  - One-line subtext
+  - Primary CTA button
+
+RESPONSIVE BREAKPOINTS:
+  - 1280px: Full desktop (primary design target)
+  - 768px: Tablet (sidebar collapses to icons only, 64px)
+  - 375px: Mobile (bottom tab bar, no sidebar)
+
+DARK MODE:
+  Provide dark mode variants for all 6 dashboard screens.
+  Dark mode should feel premium — deep charcoal surfaces, 
+  not pure black. Indigo and teal accents glow slightly more 
+  vivid against dark backgrounds.
+
+FIGMA FILE STRUCTURE:
+  Organize your Figma file as:
+  📁 00 - Design System (Colors, Typography, Components)
+  📁 01 - Chrome Extension (3 states)
+  📁 02 - Dashboard Pages (Light + Dark for each)
+  📁 03 - Onboarding Flow
+  📁 04 - Mobile Screens
+  📁 05 - Empty States
+  📁 06 - Prototype Flows
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DELIVERABLE CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+□ Full design system page (colors, type, components, icons)
+□ Chrome Extension popup — 3 states (logged out, active session, no session)
+□ Home dashboard — light + dark
+□ History page — light + dark (with expanded session state)
+□ Planner page — light + dark (with AI loading state)
+□ Insights page — light + dark (all charts filled with sample data)
+□ Agent Chat page — light + dark (with sample conversation)
+□ Onboarding flow — 3 steps
+□ Mobile versions of all dashboard pages
+□ All empty states
+□ Interactive Figma prototype connecting all screens
