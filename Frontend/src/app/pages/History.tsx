@@ -10,7 +10,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { api } from '../../lib/api';
-import { Skeleton, PageSkeleton } from '../components/ui/Skeleton';
+import { Skeleton, PageSkeleton } from '../components/ui/skeleton';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Session {
