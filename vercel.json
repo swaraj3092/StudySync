@@ -1,7 +1,10 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "Frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://studysync-api-951358013739.us-central1.run.app/api/$1" },
-    { "source": "/(.*)", "destination": "Frontend/$1" }
+    { "source": "/(.*)", "destination": "Frontend/index.html" }
   ]
 }
