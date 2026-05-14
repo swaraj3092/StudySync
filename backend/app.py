@@ -17,11 +17,27 @@ import phoenix as px
 from openinference.instrumentation.google_generativeai import GoogleGenerativeAiInstrumentor
 
 # Initialize Arize Phoenix for AI Observability
-# This launches a local dashboard and instruments all Gemini calls
+# Switches to Cloud mode if PHOENIX_API_KEY is found, otherwise uses Local mode
 try:
-    px.launch_app()
-    GoogleGenerativeAiInstrumentor().instrument()
-    print("✦ Arize Phoenix Observability: ACTIVE")
+    api_key = os.getenv("PHOENIX_API_KEY")
+    if api_key:
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+        from opentelemetry.sdk.trace import TracerProvider
+        from opentelemetry.sdk.trace.export import BatchSpanProcessor
+        
+        # Configure Cloud Export
+        endpoint = "https://app.phoenix.arize.com/v1/traces"
+        exporter = OTLPSpanExporter(endpoint=endpoint, headers={"api_key": api_key})
+        tracer_provider = TracerProvider()
+        tracer_provider.add_span_processor(BatchSpanProcessor(exporter))
+        
+        GoogleGenerativeAiInstrumentor().instrument(tracer_provider=tracer_provider)
+        print("✦ Arize Phoenix Cloud: CONNECTED")
+    else:
+        # Local Mode
+        px.launch_app()
+        GoogleGenerativeAiInstrumentor().instrument()
+        print("✦ Arize Phoenix Local: ACTIVE (No API Key found)")
 except Exception as e:
     print(f"✦ Arize Phoenix failed to start: {e}")
 
