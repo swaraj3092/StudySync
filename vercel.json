@@ -2,6 +2,6 @@
   "version": 2,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://studysync-api-951358013739.us-central1.run.app/api/$1" },
-    { "source": "/(.*)", "destination": "/$1" }
+    { "source": "/(.*)", "destination": "Frontend/$1" }
   ]
 }
