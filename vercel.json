@@ -3,8 +3,9 @@
   "builds": [
     { "src": "Frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
   ],
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://studysync-api-951358013739.us-central1.run.app/api/$1" },
-    { "source": "/(.*)", "destination": "Frontend/index.html" }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "https://studysync-api-951358013739.us-central1.run.app/api/$1" },
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/index.html" }
   ]
 }
