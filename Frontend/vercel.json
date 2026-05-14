@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.py" }
+    { "source": "/api/(.*)", "destination": "https://studysync-api-951358013739.us-central1.run.app/api/$1" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
