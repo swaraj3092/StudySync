@@ -106,11 +106,10 @@ export function Welcome() {
 
         {/* PARALLAX MARQUEE 1 */}
         <div className="py-10 border-y border-white/5 overflow-hidden whitespace-nowrap bg-white/[0.02]">
-           <motion.div 
-             style={{ x: textX1 }}
-             className="text-[10vh] font-black tracking-tighter text-transparent"
-             style={{ WebkitTextStroke: '1px rgba(255,255,255,0.1)', x: textX1 }}
-           >
+            <motion.div 
+              className="text-[10vh] font-black tracking-tighter text-transparent"
+              style={{ WebkitTextStroke: '1px rgba(255,255,255,0.1)', x: textX1 }}
+            >
              MISSION COMMANDER // AUTONOMOUS AGENT // STUDY SYNC // NEURAL LINK // PERSISTENT MEMORY // 
            </motion.div>
         </div>
@@ -173,11 +172,10 @@ export function Welcome() {
 
         {/* PARALLAX MARQUEE 2 */}
         <div className="py-10 border-y border-white/5 overflow-hidden whitespace-nowrap">
-           <motion.div 
-             style={{ x: textX2 }}
-             className="text-[10vh] font-black tracking-tighter text-transparent"
-             style={{ WebkitTextStroke: '1px rgba(255,255,255,0.15)', x: textX2 }}
-           >
+            <motion.div 
+              className="text-[10vh] font-black tracking-tighter text-transparent"
+              style={{ WebkitTextStroke: '1px rgba(255,255,255,0.15)', x: textX2 }}
+            >
              GEMINI 2.5 FLASH // GOOGLE CLOUD // MONGODB ATLAS // SUPABASE // REACT // TYPESCRIPT // 
            </motion.div>
         </div>
