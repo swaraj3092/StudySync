@@ -42,7 +42,7 @@ export function SessionCard({
     e.dataTransfer.setData('application/studysync-session', JSON.stringify(sessionData));
     
     // For dragging to other windows/tabs (Open as PDF)
-    const exportUrl = `http://localhost:5000/api/sessions/${_id}/export-pdf`;
+    const exportUrl = `${window.location.origin}/api/sessions/${_id}/export-pdf`;
     e.dataTransfer.setData('text/uri-list', exportUrl);
     e.dataTransfer.setData('text/plain', `StudySync Session: ${title}\nView PDF: ${exportUrl}`);
     
