@@ -2,8 +2,12 @@ import os
 import google.generativeai as genai
 import traceback
 
-# The key from the user's .env
-key = "AIzaSyCaGNs5rDXgBq0Jw2Cltwm1Y6AUeEH5Wp0"
+# The key should be loaded from environment
+key = os.getenv("GEMINI_API_KEY")
+if not key:
+    print("GEMINI_API_KEY not found")
+    exit(1)
+
 genai.configure(api_key=key)
 
 try:
