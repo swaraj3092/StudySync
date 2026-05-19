@@ -188,7 +188,7 @@ def diagnose_screen():
 
         image_bytes = base64.b64decode(image_data)
 
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
 
         prompt = """You are StudySync AI Vision. Analyze this screenshot of a study session.
 

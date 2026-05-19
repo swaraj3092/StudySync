@@ -135,8 +135,13 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
   try {
     await chrome.storage.local.set({ aiCapturing: true });
+    
+    // Get the window of the active tab instead of passing null, which is more robust for background alarms
+    const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const targetWindowId = activeTab ? activeTab.windowId : null;
+
     const dataUrl = await new Promise((resolve) => {
-      chrome.tabs.captureVisibleTab(null, { format: 'jpeg', quality: 70 }, (url) => {
+      chrome.tabs.captureVisibleTab(targetWindowId, { format: 'jpeg', quality: 70 }, (url) => {
         resolve(chrome.runtime.lastError ? null : url);
       });
     });
@@ -221,6 +226,10 @@ async function handleStartSession(providedTabId) {
 
   const data = await resp.json();
   await chrome.storage.local.set({ activeSessionId: data._id });
+  
+  // Trigger near-instant capture for immediate feedback!
+  chrome.alarms.create('visionCaptureOnce', { delayInMinutes: 0.01 });
+
   scheduleCapture();
   return data._id;
 }
