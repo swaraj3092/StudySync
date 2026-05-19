@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://localhost:5000/api';
+const BACKEND_URL = 'https://studysync-api-951358013739.us-central1.run.app/api';
 
 // ─── Focus Shield Configuration ──────────────────────────────────────────────
 const BLOCKED_DOMAINS = [
@@ -30,27 +30,50 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return false;
   }
 
-  if (request.action === 'enableFocusShield') {
-    chrome.storage.local.set({ focusShieldActive: true });
-    notify('🛡️ Focus-Shield ACTIVE', 'Distracting sites are now blocked.');
+  // FIX: Handle both FocusShield and DeepFocus action names
+  if (request.action === 'enableFocusShield' || request.action === 'enableDeepFocus') {
+    chrome.storage.local.set({ focusShieldActive: true, deepFocusEnabled: true });
+    notify('🛡️ Deep Lock ACTIVE', 'Tab is locked. Stay focused on your lecture!');
     return false;
   }
 
-  if (request.action === 'disableFocusShield') {
-    chrome.storage.local.set({ focusShieldActive: false });
-    notify('🔓 Focus-Shield Disabled', 'You can now browse freely.');
+  if (request.action === 'disableFocusShield' || request.action === 'disableDeepFocus') {
+    chrome.storage.local.set({ focusShieldActive: false, deepFocusEnabled: false });
+    notify('🔓 Deep Lock Disabled', 'You can now browse freely.');
     return false;
   }
 
+  // Manual pause does NOT stop AI Vision — only stops the timer
   if (request.action === 'pauseSession') {
-    chrome.alarms.clear('visionCapture');
-    chrome.alarms.clear('visionCaptureOnce');
     chrome.storage.local.set({ sessionManuallyPaused: true });
+    // AI Vision continues even during manual pause
     return false;
   }
 
   if (request.action === 'resumeSession') {
     chrome.storage.local.set({ sessionManuallyPaused: false });
+    scheduleCapture();
+    return false;
+  }
+
+  // Video pause from YouTube — this DOES pause AI Vision
+  if (request.action === 'videoPaused') {
+    chrome.storage.local.set({ videoPaused: true });
+    // Capture one final frame when video pauses
+    chrome.alarms.clear('visionCapture');
+    chrome.alarms.create('visionCaptureOnce', { delayInMinutes: 0.05 });
+    return false;
+  }
+
+  // Video resumed — restart AI Vision
+  if (request.action === 'videoPlayed') {
+    chrome.storage.local.set({ videoPaused: false });
+    scheduleCapture();
+    return false;
+  }
+
+  if (request.action === 'videoSeeked') {
+    chrome.storage.local.set({ videoPaused: false });
     scheduleCapture();
     return false;
   }
@@ -61,7 +84,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// ─── Focus Shield Enforcer ───────────────────────────────────────────────────
+// ─── Focus Shield / Deep Lock Enforcer ───────────────────────────────────────
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.url) {
     const { focusShieldActive } = await chrome.storage.local.get(['focusShieldActive']);
@@ -69,13 +92,13 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
     const isBlocked = BLOCKED_DOMAINS.some(domain => changeInfo.url.includes(domain));
     if (isBlocked) {
-      chrome.tabs.update(tabId, { url: 'https://studysync-ai.web.app/focus-mode' }); 
-      notify('⚠️ Shield Block', 'Focus-Shield blocked a distracting site.');
+      chrome.tabs.update(tabId, { url: 'https://studysync-kappa-two.vercel.app/' });
+      notify('⚠️ Deep Lock Block', 'A distracting site was blocked. Stay focused!');
     }
   }
 });
 
-// ─── Deep Focus Enforcer (Existing tab locking) ───────────────────────────────
+// ─── Deep Focus Tab Locker ───────────────────────────────────────────────────
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const { lockedTabId, deepFocusEnabled } = await chrome.storage.local.get(['lockedTabId', 'deepFocusEnabled']);
   if (!deepFocusEnabled || !lockedTabId) return;
@@ -83,21 +106,27 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
   if (activeInfo.tabId !== locked) {
     try {
       await chrome.tabs.update(locked, { active: true });
-      notify('🔒 Deep Focus', 'Stay focused on your lecture!');
+      notify('🔒 Deep Lock Active', 'Stay focused on your lecture!');
     } catch (e) {}
   }
 });
 
-// ─── AI Vision Alarm Listener ───────────────────────────────────────────────
+// ─── AI Vision Alarm Listener ────────────────────────────────────────────────
+// AI Vision pauses ONLY when the YouTube video is paused, not on manual pause.
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   const isOneShot = alarm.name === 'visionCaptureOnce';
   if (alarm.name !== 'visionCapture' && !isOneShot) return;
 
-  const { isRunning, sessionManuallyPaused, activeSessionId, videoPaused } =
-    await chrome.storage.local.get(['isRunning', 'sessionManuallyPaused', 'activeSessionId', 'videoPaused']);
+  const { isRunning, activeSessionId, videoPaused } =
+    await chrome.storage.local.get(['isRunning', 'activeSessionId', 'videoPaused']);
 
-  if (!isRunning || sessionManuallyPaused || !activeSessionId) return;
-  if (!isOneShot && videoPaused) return;
+  // Only stop if session is not running or no session ID
+  if (!isRunning || !activeSessionId) return;
+
+  // For recurring capture, skip if video is paused (wait for one-shot on pause event)
+  if (!isOneShot && videoPaused) {
+    return;
+  }
 
   try {
     const dataUrl = await new Promise((resolve) => {
@@ -114,14 +143,14 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     const { userId, tabTitle } = await chrome.storage.local.get(['userId', 'tabTitle']);
     const context = `Study screen: "${tabTitle || 'Study Tab'}"`;
 
-    await sendToAI(dataUrl, activeSessionId, userId || 'dev_guest_user', context, videoPaused);
+    await sendToAI(dataUrl, activeSessionId, userId || 'dev_guest_user', context);
     if (!isOneShot) scheduleCapture();
   } catch (e) {
     if (!isOneShot) scheduleCapture();
   }
 });
 
-async function sendToAI(imageData, sessionId, userId, context, isImportant = false) {
+async function sendToAI(imageData, sessionId, userId, context) {
   try {
     const res = await fetch(`${BACKEND_URL}/chat/diagnose?userId=${userId}`, {
       method: 'POST',
@@ -144,9 +173,9 @@ async function sendToAI(imageData, sessionId, userId, context, isImportant = fal
       if (notesQueue.length > 25) notesQueue.pop();
       await chrome.storage.local.set({ notesQueue, lastNoteTime: Date.now() });
 
-      notify('📸 Insights Captured', data.summary.substring(0, 80) + '...');
+      notify('📸 Insight Captured', data.summary.substring(0, 80) + '...');
       if (data.quiz && data.quiz.length > 0) {
-        notify('🧠 Pop Quiz Ready', 'Your agent has generated a quiz based on your screen!');
+        notify('🧠 Pop Quiz Ready', 'A quiz was generated based on your screen!');
       }
     }
   } catch (e) {
@@ -158,12 +187,14 @@ async function handleStartSession(providedTabId) {
   let tabId = providedTabId;
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   tabId = tabId || tab?.id;
-  
+
   await chrome.storage.local.set({
     lockedTabId: tabId,
     sessionStartTime: Date.now(),
     tabTitle: tab.title || 'Study Session',
     isRunning: true,
+    sessionManuallyPaused: false,
+    videoPaused: false,
     notesQueue: []
   });
 
@@ -196,11 +227,15 @@ async function handleStopSession() {
       body: JSON.stringify({ status: 'completed', endTime: new Date().toISOString() })
     });
   } finally {
-    await chrome.storage.local.remove(['activeSessionId', 'isRunning', 'focusShieldActive']);
+    await chrome.storage.local.remove([
+      'activeSessionId', 'isRunning', 'focusShieldActive',
+      'sessionManuallyPaused', 'videoPaused', 'deepFocusEnabled', 'lockedTabId'
+    ]);
   }
 }
 
 function scheduleCapture() {
+  chrome.alarms.clear('visionCapture');
   chrome.alarms.create('visionCapture', { delayInMinutes: 0.75 });
 }
 

@@ -1,4 +1,4 @@
-const BACKEND_URL = 'http://localhost:5000/api';
+const BACKEND_URL = 'https://studysync-api-951358013739.us-central1.run.app/api';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let timerInterval = null;
@@ -143,7 +143,7 @@ function updateYTStatus(paused) {
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 document.getElementById('sync-link').onclick = () =>
-  chrome.tabs.create({ url: 'http://localhost:5173/' });
+  chrome.tabs.create({ url: 'https://studysync-kappa-two.vercel.app/' });
 
 openDashboard.onclick = () => {
   chrome.storage.local.get(['userId'], (result) => {
@@ -159,7 +159,7 @@ openDashboard.onclick = () => {
       }
       return;
     }
-    chrome.tabs.create({ url: 'http://localhost:5173/dashboard' });
+    chrome.tabs.create({ url: 'https://studysync-kappa-two.vercel.app/' });
   });
 };
 
@@ -314,15 +314,16 @@ function setRunningUI(running) {
     }
     btnRow.appendChild(ppBtn);
 
-    if (visionBadge) visionBadge.style.display = isPaused ? 'none' : 'flex';
+    // AI Vision badge always visible during running session (regardless of manual pause)
+    if (visionBadge) visionBadge.style.display = isRunning ? 'flex' : 'none';
     if (focusRow) focusRow.style.display = 'flex';
     noteInputArea.style.display = 'flex';
 
     statusDot.className = 'status-dot ' + (isPaused ? 'paused' : 'active');
     statusText.textContent = isPaused ? 'Paused' : 'Studying';
 
-    if (!isPaused) captureStatus.textContent = '👁 AI Vision active — watching…';
-    else captureStatus.textContent = '';
+    // AI Vision always on — status only pauses for video, not manual pause
+    captureStatus.textContent = '👁 AI Vision active — watching…';
   } else {
     btnRow.innerHTML = `
       <button id="action-btn" class="btn btn-start">
@@ -352,14 +353,11 @@ lockToggle.addEventListener('change', async () => {
   const enabled = lockToggle.checked;
   chrome.storage.local.set({ deepFocusEnabled: enabled });
   if (enabled) {
-    const { lockedTabId } = await chrome.storage.local.get(['lockedTabId']);
-    if (!lockedTabId) {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (tab) chrome.storage.local.set({ lockedTabId: tab.id, deepFocusEnabled: true });
-    }
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab) chrome.storage.local.set({ lockedTabId: tab.id, deepFocusEnabled: true, focusShieldActive: true });
     chrome.runtime.sendMessage({ action: 'enableDeepFocus' });
   } else {
-    chrome.storage.local.set({ deepFocusEnabled: false });
+    chrome.storage.local.set({ deepFocusEnabled: false, focusShieldActive: false });
     chrome.runtime.sendMessage({ action: 'disableDeepFocus' });
   }
 });
