@@ -49,7 +49,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
 
 chrome.storage.local.get([
   'userId', 'isRunning', 'isPaused', 'sessionStartTime', 'elapsedBeforePause',
-  'activeSessionId', 'deepFocusEnabled', 'sessionCount', 'notesQueue', 'videoPaused'
+  'activeSessionId', 'deepFocusEnabled', 'sessionCount', 'notesQueue', 'videoPaused', 'aiCapturing'
 ], (result) => {
   if (!result.userId) {
     syncWarn.style.display = 'block';
@@ -89,44 +89,74 @@ chrome.storage.local.get([
   if (result.deepFocusEnabled) lockToggle.checked = true;
 });
 
-// ─── Poll for new notes + YT state from background every 2s ──────────────────
+// ─── Poll for new notes + YT state + AI state from background every 1.5s ─────
 const notesPoller = setInterval(async () => {
   if (!isRunning) return;
-  const { notesQueue, videoPaused } = await chrome.storage.local.get(['notesQueue', 'videoPaused']);
-  
+  const { notesQueue, videoPaused, aiCapturing, elapsedBeforePause: bgElapsed } =
+    await chrome.storage.local.get(['notesQueue', 'videoPaused', 'aiCapturing', 'elapsedBeforePause']);
+
+  // ── Skeleton animation for AI capture ────────────────────────────────────
+  if (typeof aiCapturing !== 'undefined') updateCapturingUI(aiCapturing);
+
   if (notesQueue && notesQueue.length !== lastNoteCount) {
     localNotes = notesQueue;
     lastNoteCount = localNotes.length;
     renderNotes();
   }
 
-  // ── Auto-pause timer when YouTube is paused ────────────────────────────────
+  // ── Timer pause/resume when YouTube video pauses ─────────────────────────
   if (videoPaused && !lastVideoPausedState && !isPaused) {
+    // Pause timer
     ytAutoPaused = true;
     elapsedBeforePause += Date.now() - sessionStartTime;
     clearInterval(timerInterval);
     timerInterval = null;
     timerEl.classList.add('paused');
-    timerLabel.textContent = '⏸ YT PAUSED';
+    timerLabel.textContent = '⏸ VIDEO PAUSED';
     updateYTStatus(true);
-    captureStatus.textContent = '📌 Video paused — frame captured';
+    captureStatus.textContent = '📌 Video paused — AI captured frame';
   } else if (!videoPaused && lastVideoPausedState && ytAutoPaused && !isPaused) {
+    // Resume timer — use background's updated elapsedBeforePause to account for pause duration
     ytAutoPaused = false;
+    elapsedBeforePause = bgElapsed || elapsedBeforePause;
     sessionStartTime = Date.now();
     startTimer();
     timerEl.classList.remove('paused');
     timerLabel.textContent = 'STUDY TIME';
     updateYTStatus(false);
     captureStatus.textContent = '👁 AI Vision active — watching…';
-  } else if (!videoPaused && !ytAutoPaused && !isPaused) {
-    updateYTStatus(false);
-    captureStatus.textContent = '👁 AI Vision active — watching…';
   }
 
   lastVideoPausedState = videoPaused || false;
-}, 2000);
+}, 1500);
 
 window.addEventListener('unload', () => clearInterval(notesPoller));
+
+// ─── AI Capturing Skeleton Animation ─────────────────────────────────────────
+let skeletonVisible = false;
+function updateCapturingUI(isCapturing) {
+  if (isCapturing === skeletonVisible) return;
+  skeletonVisible = isCapturing;
+
+  if (isCapturing) {
+    // Show skeleton at top of notes list
+    const skeleton = document.createElement('div');
+    skeleton.id = 'ai-skeleton';
+    skeleton.className = 'note-item ai-note skeleton-note';
+    skeleton.innerHTML = `
+      <div class="note-meta ai">👁 AI · Capturing now…</div>
+      <div class="skeleton-line" style="width:90%"></div>
+      <div class="skeleton-line" style="width:70%"></div>
+      <div class="skeleton-line" style="width:80%"></div>
+    `;
+    if (notesList) notesList.prepend(skeleton);
+    if (captureStatus) captureStatus.textContent = '⚡ AI is analysing your screen…';
+  } else {
+    const existing = document.getElementById('ai-skeleton');
+    if (existing) existing.remove();
+    if (captureStatus) captureStatus.textContent = '👁 AI Vision active — watching…';
+  }
+}
 
 function updateYTStatus(paused) {
   if (!ytSyncIndicator) return;

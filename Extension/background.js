@@ -56,24 +56,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return false;
   }
 
-  // Video pause from YouTube — this DOES pause AI Vision
+  // Video pause from YouTube — this DOES pause AI Vision and timer
   if (request.action === 'videoPaused') {
-    chrome.storage.local.set({ videoPaused: true });
+    const now = Date.now();
+    chrome.storage.local.set({ videoPaused: true, videoPausedAt: now });
     // Capture one final frame when video pauses
     chrome.alarms.clear('visionCapture');
     chrome.alarms.create('visionCaptureOnce', { delayInMinutes: 0.05 });
     return false;
   }
 
-  // Video resumed — restart AI Vision
+  // Video resumed — restart AI Vision and timer
   if (request.action === 'videoPlayed') {
-    chrome.storage.local.set({ videoPaused: false });
+    chrome.storage.local.get(['videoPausedAt', 'elapsedBeforePause'], (res) => {
+      const pauseDuration = res.videoPausedAt ? Date.now() - res.videoPausedAt : 0;
+      const newElapsed = (res.elapsedBeforePause || 0) + pauseDuration;
+      chrome.storage.local.set({ videoPaused: false, videoPausedAt: null, elapsedBeforePause: newElapsed });
+    });
     scheduleCapture();
     return false;
   }
 
   if (request.action === 'videoSeeked') {
-    chrome.storage.local.set({ videoPaused: false });
+    chrome.storage.local.set({ videoPaused: false, videoPausedAt: null });
     scheduleCapture();
     return false;
   }
@@ -129,6 +134,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 
   try {
+    await chrome.storage.local.set({ aiCapturing: true });
     const dataUrl = await new Promise((resolve) => {
       chrome.tabs.captureVisibleTab(null, { format: 'jpeg', quality: 70 }, (url) => {
         resolve(chrome.runtime.lastError ? null : url);
@@ -136,6 +142,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     });
 
     if (!dataUrl) {
+      await chrome.storage.local.set({ aiCapturing: false });
       if (!isOneShot) scheduleCapture();
       return;
     }
@@ -144,8 +151,10 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     const context = `Study screen: "${tabTitle || 'Study Tab'}"`;
 
     await sendToAI(dataUrl, activeSessionId, userId || 'dev_guest_user', context);
+    await chrome.storage.local.set({ aiCapturing: false });
     if (!isOneShot) scheduleCapture();
   } catch (e) {
+    await chrome.storage.local.set({ aiCapturing: false });
     if (!isOneShot) scheduleCapture();
   }
 });
