@@ -173,10 +173,77 @@ def fallback_to_gemini(user_message, user_id):
 def diagnose_screen():
     data = request.json
     image_data = data.get("image")
-    if not image_data: return jsonify({"error": "No image"}), 400
+    context = data.get("context", "Study session screen")
+    session_id = data.get("sessionId")
+
+    if not image_data:
+        return jsonify({"error": "No image provided"}), 400
+
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
-        # Logic for vision would go here...
-        return jsonify({"status": "success", "analysis": "Vision analysis triggered."})
+        import base64, re
+
+        # Strip data URL prefix if present
+        if ',' in image_data:
+            image_data = image_data.split(',', 1)[1]
+
+        image_bytes = base64.b64decode(image_data)
+
+        model = genai.GenerativeModel('gemini-2.0-flash')
+
+        prompt = """You are StudySync AI Vision. Analyze this screenshot of a study session.
+
+Your task:
+1. Extract the KEY educational content visible (bullet points, concepts, formulas, definitions).
+2. Write a concise summary (2-4 sentences) of the main topic on screen.
+3. Generate 1-2 quick quiz questions based on the visible content.
+
+Return ONLY valid JSON:
+{
+  "summary": "Brief summary of what is being studied",
+  "key_points": ["point 1", "point 2"],
+  "quiz": [{"question": "Q?", "answer": "A"}]
+}
+
+If no educational content is visible, return: {"summary": null, "key_points": [], "quiz": []}"""
+
+        response = model.generate_content([
+            prompt,
+            {"mime_type": "image/jpeg", "data": image_bytes}
+        ])
+
+        raw = response.text.strip()
+        json_match = re.search(r'\{.*\}', raw, re.DOTALL)
+        if not json_match:
+            return jsonify({"summary": None, "quiz": []}), 200
+
+        result = json.loads(json_match.group())
+        summary = result.get("summary")
+        quiz = result.get("quiz", [])
+        key_points = result.get("key_points", [])
+
+        # Save to MongoDB session
+        if session_id and summary:
+            try:
+                note_doc = {
+                    "text": summary,
+                    "keyPoints": key_points,
+                    "type": "ai_vision",
+                    "timestamp": datetime.datetime.utcnow()
+                }
+                db.sessions.update_one(
+                    {"_id": ObjectId(session_id)},
+                    {"$push": {"notes": note_doc}}
+                )
+            except Exception as db_err:
+                print(f"DB note save error: {db_err}")
+
+        return jsonify({
+            "status": "success",
+            "summary": summary,
+            "key_points": key_points,
+            "quiz": quiz
+        })
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Diagnose error: {str(e)}")
+        return jsonify({"error": str(e), "summary": None, "quiz": []}), 500
