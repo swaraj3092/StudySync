@@ -17,9 +17,12 @@ interface Notification {
 
 interface TopBarProps {
   greeting?: string;
+  user?: { user_metadata?: { full_name?: string; avatar_url?: string } } | null;
 }
 
-export function TopBar({ greeting }: TopBarProps) {
+export function TopBar({ greeting, user }: TopBarProps) {
+  const displayName = user?.user_metadata?.full_name?.split(' ')[0] || 'Scholar';
+  const avatarInitial = displayName.charAt(0).toUpperCase();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
@@ -187,12 +190,20 @@ export function TopBar({ greeting }: TopBarProps) {
         {/* User Profile */}
         <div className="flex items-center gap-3 pl-2 border-l border-border/50">
           <div className="hidden sm:block text-right">
-            <p className="text-sm font-bold leading-tight">Swaraj</p>
+            <p className="text-sm font-bold leading-tight">{displayName}</p>
             <p className="text-[10px] font-medium text-text-hint uppercase tracking-wider">Premium Scholar</p>
           </div>
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/20 flex items-center justify-center text-white text-sm font-bold ring-2 ring-background">
-            S
-          </div>
+          {user?.user_metadata?.avatar_url ? (
+            <img
+              src={user.user_metadata.avatar_url}
+              alt={displayName}
+              className="h-9 w-9 rounded-xl object-cover ring-2 ring-background shadow-lg"
+            />
+          ) : (
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/20 flex items-center justify-center text-white text-sm font-bold ring-2 ring-background">
+              {avatarInitial}
+            </div>
+          )}
         </div>
       </div>
     </div>

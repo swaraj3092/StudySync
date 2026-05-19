@@ -104,7 +104,7 @@ export function DashboardLayout() {
             animate={{ opacity: 1, x: 0 }}
             className="relative z-10 flex flex-1 flex-col overflow-hidden"
           >
-            <TopBar greeting={greeting} />
+            <TopBar greeting={greeting} user={user} />
             
             <main className="flex-1 overflow-y-auto custom-scrollbar">
               <AnimatePresence mode="wait">
